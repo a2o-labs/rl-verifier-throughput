@@ -1,0 +1,22 @@
+{
+ "tag": "v0.2-A-corpus",
+ "n": 100,
+ "deadline_s": 190,
+ "maxheartbeats": "as-corpus(0)",
+ "cold_first_s": 25.5,
+ "warm_second_s": 25.5,
+ "levels": [
+  {
+   "C": 1,
+   "n": 100,
+   "wall_s": 1450.5,
+   "proofs_per_s": 0.0689,
+   "lat_p50": 2.34,
+   "lat_mean": 14.5,
+   "good_lat_mean": 7.19,
+   "timeout_rate": 0.04,
+   "lean_err_rate": 0.0,
+   "tail_worktime_share": 0.524
+  }
+ ]
+}

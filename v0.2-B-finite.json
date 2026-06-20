@@ -1,0 +1,70 @@
+{
+ "tag": "v0.2-B-finite",
+ "n": 100,
+ "deadline_s": 190,
+ "maxheartbeats": "200000",
+ "cold_first_s": 23.7,
+ "warm_second_s": 23.5,
+ "levels": [
+  {
+   "C": 1,
+   "n": 100,
+   "wall_s": 921.7,
+   "proofs_per_s": 0.1085,
+   "lat_p50": 2.26,
+   "lat_mean": 9.22,
+   "good_lat_mean": 9.22,
+   "timeout_rate": 0.0,
+   "lean_err_rate": 0.07,
+   "tail_worktime_share": 0.0
+  },
+  {
+   "C": 2,
+   "n": 100,
+   "wall_s": 494.1,
+   "proofs_per_s": 0.2024,
+   "lat_p50": 2.31,
+   "lat_mean": 9.37,
+   "good_lat_mean": 9.37,
+   "timeout_rate": 0.0,
+   "lean_err_rate": 0.07,
+   "tail_worktime_share": 0.0
+  },
+  {
+   "C": 4,
+   "n": 100,
+   "wall_s": 298.9,
+   "proofs_per_s": 0.3345,
+   "lat_p50": 2.38,
+   "lat_mean": 9.9,
+   "good_lat_mean": 9.9,
+   "timeout_rate": 0.0,
+   "lean_err_rate": 0.07,
+   "tail_worktime_share": 0.0
+  },
+  {
+   "C": 6,
+   "n": 100,
+   "wall_s": 295.4,
+   "proofs_per_s": 0.3385,
+   "lat_p50": 3.75,
+   "lat_mean": 15.21,
+   "good_lat_mean": 15.21,
+   "timeout_rate": 0.0,
+   "lean_err_rate": 0.07,
+   "tail_worktime_share": 0.0
+  },
+  {
+   "C": 7,
+   "n": 100,
+   "wall_s": 386.0,
+   "proofs_per_s": 0.2591,
+   "lat_p50": 6.77,
+   "lat_mean": 24.07,
+   "good_lat_mean": 17.16,
+   "timeout_rate": 0.04,
+   "lean_err_rate": 0.03,
+   "tail_worktime_share": 0.316
+  }
+ ]
+}

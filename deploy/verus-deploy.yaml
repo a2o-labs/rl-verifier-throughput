@@ -1,0 +1,22 @@
+# Verus (Rust verifier, SMT/Z3) on k3s — the SECOND on-prem verifier backend (Lean/Kimina is the first).
+# Used by environments/spec_faithfulness/ to mechanically check specification faithfulness.
+# Verus is a CLI (no HTTP server, unlike Kimina): keep the pod alive with `sleep infinity` and run `verus`
+# via `kubectl exec` (testing) or install the `verus` binary wherever the env runs (published use).
+# NOTE: `:latest` is NOT published on GHCR — pin an explicit dated tag (query the GHCR tags list for newer).
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: verus, namespace: ai4math }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: verus } }
+  template:
+    metadata: { labels: { app: verus } }
+    spec:
+      nodeSelector: { kubernetes.io/hostname: your-amd64-node }   # native amd64; reachable same-node
+      containers:
+        - name: verus
+          image: ghcr.io/verus-lang/verus:0.2025.06.23.2e59154   # `verus` lives at /opt/verus/verus
+          command: ["sleep", "infinity"]   # override the `verus` entrypoint so the pod stays up for exec
+          resources:
+            requests: { cpu: "1", memory: "2Gi" }
+            limits: { cpu: "4", memory: "8Gi" }

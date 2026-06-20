@@ -1,0 +1,22 @@
+{
+ "tag": "v0.3-tail1k",
+ "n": 1000,
+ "deadline_s": 190,
+ "maxheartbeats": "as-corpus(0)",
+ "cold_first_s": 25.7,
+ "warm_second_s": 25.6,
+ "levels": [
+  {
+   "C": 6,
+   "n": 1000,
+   "wall_s": 4023.2,
+   "proofs_per_s": 0.2486,
+   "lat_p50": 6.15,
+   "lat_mean": 24.08,
+   "good_lat_mean": 16.26,
+   "timeout_rate": 0.045,
+   "lean_err_rate": 0.004,
+   "tail_worktime_share": 0.355
+  }
+ ]
+}

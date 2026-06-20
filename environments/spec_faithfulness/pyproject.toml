@@ -1,0 +1,23 @@
+[project]
+name = "spec-faithfulness"
+description = "Mechanically-checked Verus specification-faithfulness environment for `verifiers`: a spec must accept the correct implementation and reject buggy ones (differential, no LLM judge). On-prem, GPU-free."
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "verifiers>=0.1.8",
+    "datasets>=3.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["spec_faithfulness.py", "pyproject.toml", "README.md"]
+
+[tool.hatch.build.targets.wheel]
+include = ["spec_faithfulness.py"]
+
+[tool.verifiers.eval]
+num_examples = 16
+rollouts_per_example = 3

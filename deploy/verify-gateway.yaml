@@ -1,0 +1,48 @@
+# verify-gateway on k3s — the hardening proxy in front of Kimina (applies the scorecard's two levers).
+# Ships the stdlib script as a ConfigMap on a python:3.12-slim pod — no custom image build needed.
+# Point clients at the `verify-gateway` service instead of `kimina`.
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: verify-gateway-src, namespace: ai4math }
+data:
+  # keep in sync with gateway/verify_gateway.py (kubectl create configmap --from-file to regenerate)
+  verify_gateway.py: |
+    # NOTE: this is a copy of gateway/verify_gateway.py — regenerate with:
+    #   kubectl create configmap verify-gateway-src -n ai4math \
+    #     --from-file=verify_gateway.py=gateway/verify_gateway.py --dry-run=client -o yaml | kubectl apply -f -
+    # (left as a placeholder here so the manifest is self-documenting; the real source is gateway/.)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: verify-gateway, namespace: ai4math }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: verify-gateway } }
+  template:
+    metadata: { labels: { app: verify-gateway } }
+    spec:
+      nodeSelector: { kubernetes.io/hostname: your-amd64-node }
+      containers:
+        - name: gateway
+          image: python:3.12-slim
+          command: ["python", "/src/verify_gateway.py"]
+          env:
+            - { name: KIMINA_UPSTREAM, value: "http://kimina:8000" }   # the in-cluster Kimina service
+            - { name: GATEWAY_MAXHEARTBEATS, value: "200000" }         # the tail lever (finite budget)
+            - { name: GATEWAY_DEADLINE, value: "60" }                  # per-proof deadline (s)
+            - { name: GATEWAY_PORT, value: "8010" }
+          ports: [ { containerPort: 8010 } ]
+          volumeMounts: [ { name: src, mountPath: /src } ]
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits: { cpu: "1", memory: "512Mi" }
+      volumes:
+        - name: src
+          configMap: { name: verify-gateway-src }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: verify-gateway, namespace: ai4math }
+spec:
+  selector: { app: verify-gateway }
+  ports: [ { port: 8010, targetPort: 8010 } ]

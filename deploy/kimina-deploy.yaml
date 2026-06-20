@@ -1,0 +1,36 @@
+# Kimina Lean Server on k3s — prebuilt image (Mathlib baked in, no multi-hour build).
+# NOTE: pin the node to a NATIVE amd64 box. (A WSL2 worker can run the server, but its pod may not be
+# reachable cross-node via ClusterIP and `kubectl port-forward` to it can fail — only `kubectl exec` works —
+# so co-locate the throughput harness with the server, or run on a native node.)
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: kimina-lean-server, namespace: ai4math }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: kimina-lean-server } }
+  strategy: { type: Recreate }
+  template:
+    metadata: { labels: { app: kimina-lean-server } }
+    spec:
+      nodeSelector: { kubernetes.io/hostname: your-amd64-node }   # native amd64; reachable same-node
+      containers:
+        - name: kimina
+          image: projectnumina/kimina-lean-server:2.0.0
+          ports: [ { containerPort: 8000 } ]
+          env:
+            - { name: LEAN_SERVER_PORT, value: "8000" }
+            - { name: LEAN_SERVER_HOST, value: "0.0.0.0" }
+            - { name: LEAN_SERVER_MAX_REPLS, value: "4" }     # v0.1 finding: ~cores/2 is the sweet spot on 8 cores (C=5-7 add ~no throughput + push p50 4->8s). Deployable default = cores/2; for a benchmark sweep raise to cores.
+            - { name: LEAN_SERVER_MAX_REPL_MEM, value: "5G" } # per-REPL cap; 4 x 5G = 20G < pod 22Gi -> the per-REPL cap bites BEFORE pod OOM (isolation preserved). Lean leaks lean4 #5321/#6753.
+            - { name: LEAN_SERVER_MAX_REPL_USES, value: "100" } # finite -> recycle workers (dodge the leak)
+            - { name: LEAN_SERVER_MAX_WAIT, value: "180" }      # bounds QUEUE ADMISSION, not per-proof execution; the per-proof kill lever is Lean's maxHeartbeats (see SCORECARD Finding 2)
+          resources:
+            requests: { cpu: "3", memory: "8Gi" }
+            limits: { cpu: "5", memory: "22Gi" }   # cpu limit ~ MAX_REPLS+1 (was 7); the deployable pod now matches the measurement base
+---
+apiVersion: v1
+kind: Service
+metadata: { name: kimina, namespace: ai4math }
+spec:
+  selector: { app: kimina-lean-server }
+  ports: [ { port: 8000, targetPort: 8000 } ]

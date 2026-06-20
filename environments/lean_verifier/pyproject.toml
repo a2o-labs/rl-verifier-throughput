@@ -1,0 +1,24 @@
+[project]
+name = "lean-verifier"
+description = "Anti-gameable Lean 4 theorem-proving environment for `verifiers`, rewarded by a real Kimina/Lean proof check (on-prem, GPU-free)."
+version = "0.1.2"
+requires-python = ">=3.10"
+dependencies = [
+    "verifiers>=0.1.8",
+    "httpx>=0.27.0",
+    "datasets>=3.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["lean_verifier.py", "pyproject.toml", "README.md"]
+
+[tool.hatch.build.targets.wheel]
+include = ["lean_verifier.py"]
+
+[tool.verifiers.eval]
+num_examples = 20
+rollouts_per_example = 3

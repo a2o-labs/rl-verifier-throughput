@@ -1,0 +1,53 @@
+{
+ "backbone": "kimina-lean-server:2.0.0 on an 8-core amd64 box (MAX_REPLS=7)",
+ "corpus": "Goedel-LM/Lean-workbook-proofs (first 100)",
+ "cold_start_s": 33.9,
+ "warm_single_s": 27.2,
+ "import_mathlib_tax_s": 6.7,
+ "levels": [
+  {
+   "C": 1,
+   "n": 100,
+   "wall_s": 1715.2,
+   "proofs_per_s": 0.058,
+   "lat_p50": 3.16,
+   "lat_p99": 240.1,
+   "lat_mean": 17.15,
+   "pass_rate": 0.97,
+   "transport_ok": 0.97
+  },
+  {
+   "C": 2,
+   "n": 100,
+   "wall_s": 875.6,
+   "proofs_per_s": 0.114,
+   "lat_p50": 3.21,
+   "lat_p99": 240.1,
+   "lat_mean": 17.23,
+   "pass_rate": 0.97,
+   "transport_ok": 0.97
+  },
+  {
+   "C": 4,
+   "n": 100,
+   "wall_s": 562.8,
+   "proofs_per_s": 0.178,
+   "lat_p50": 4.07,
+   "lat_p99": 240.1,
+   "lat_mean": 21.49,
+   "pass_rate": 0.96,
+   "transport_ok": 0.96
+  },
+  {
+   "C": 7,
+   "n": 100,
+   "wall_s": 569.2,
+   "proofs_per_s": 0.176,
+   "lat_p50": 8.05,
+   "lat_p99": 240.1,
+   "lat_mean": 29.37,
+   "pass_rate": 0.94,
+   "transport_ok": 0.94
+  }
+ ]
+}
